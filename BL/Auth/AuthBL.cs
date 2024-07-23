@@ -10,6 +10,18 @@ public class AuthBL : IAuthBL
         this.encrypt = encrypt;
         this.httpContextAccessor = httpContextAccessor;
     }
+
+    public async Task<int> Authenticate(string email, string password, bool rememberMe)
+    {
+        var user= await authDal.GetUser(email);
+        if(user.Password==encrypt.HashPassword(password,user.Salt))
+        {
+            Login(user.UserId ?? 0);
+            return user.UserId ?? 0;
+        }
+        return 0;
+    }
+
     public async Task<int> CreateUser(UserModel user)
     {
         user.Salt=Guid.NewGuid().ToString();

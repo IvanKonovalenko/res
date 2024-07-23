@@ -1,10 +1,10 @@
-@model RegisterViewModel
+@model LoginViewModel
 
 @{
-    ViewData["Title"]="Регистрация";
+    ViewData["Title"]="Авторизация";
 }
 <div>
-    <form action="/register" method="post">
+    <form action="/login" method="post">
     <p>
         <label>Email</label>
         <input name="Email" type="text" value="@Model.Email"/>
@@ -13,6 +13,6 @@
         <label>Пароль</label>
         <input name="Password" type="password"/>
     </p>
-    <button>Зарегистрироваться</button>
+    <button>Авторизоваться</button>
     </form>
 </div>
