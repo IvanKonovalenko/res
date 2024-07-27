@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 
 public class RegisterController:Controller
 {
@@ -20,6 +21,14 @@ public class RegisterController:Controller
     [Route("/register")]
     public async Task<IActionResult> IndexSave(RegisterViewModel model)
     {
+        if(ModelState.IsValid)
+        {
+            var errorModel=await authBl.Validate(model.Email??"");
+            if(errorModel!=null)
+            {
+                ModelState.TryAddModelError("Email",errorModel.ErrorMessage!);
+            }
+        }
         if(ModelState.IsValid)
         {
             await authBl.CreateUser(AuthMapper.MapRegisterViewModelToUserModel(model));

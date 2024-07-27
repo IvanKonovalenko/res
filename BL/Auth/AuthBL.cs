@@ -1,4 +1,6 @@
 
+using System.ComponentModel.DataAnnotations;
+
 public class AuthBL : IAuthBL
 {
     private readonly IAuthDAL authDal;
@@ -33,5 +35,14 @@ public class AuthBL : IAuthBL
     public void Login(int id)
     {
         httpContextAccessor.HttpContext?.Session.SetInt32(AuthConstants.AUTH_SESSION_PARAM_NAME,id);
+    }
+    public async Task<ValidationResult?> Validate(string email)
+    {
+        var user= await authDal.GetUser(email);
+        if(user.UserId!=null)
+        {
+            return new ValidationResult("Email уже существует");
+        }
+        return null;
     }
 }
