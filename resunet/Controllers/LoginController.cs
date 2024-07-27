@@ -21,8 +21,15 @@ public class LoginController : Controller
     {
         if (ModelState.IsValid)
         {
-            await authBl.Authenticate(model.Email!, model.Password!,model.RememberMe==true);
-            return Redirect("/");
+            try
+            {
+                int id=await authBl.Authenticate(model.Email!, model.Password!,model.RememberMe==true);
+                return Redirect("/");
+            }
+            catch(AuthorizationExeception) 
+            {
+               ModelState.AddModelError("Email","Email или Пароль неверные");
+            }        
         }
         return View("Index",model);
     }

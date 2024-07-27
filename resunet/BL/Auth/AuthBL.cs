@@ -12,18 +12,6 @@ public class AuthBL : IAuthBL
         this.encrypt = encrypt;
         this.httpContextAccessor = httpContextAccessor;
     }
-
-    public async Task<int> Authenticate(string email, string password, bool rememberMe)
-    {
-        var user= await authDal.GetUser(email);
-        if(user.Password==encrypt.HashPassword(password,user.Salt))
-        {
-            Login(user.UserId ?? 0);
-            return user.UserId ?? 0;
-        }
-        return 0;
-    }
-
     public async Task<int> CreateUser(UserModel user)
     {
         user.Salt=Guid.NewGuid().ToString();
@@ -36,10 +24,21 @@ public class AuthBL : IAuthBL
     {
         httpContextAccessor.HttpContext?.Session.SetInt32(AuthConstants.AUTH_SESSION_PARAM_NAME,id);
     }
+    public async Task<int> Authenticate(string email, string password, bool rememberMe)
+    {
+        var user= await authDal.GetUser(email);
+
+        if(user.UserId != null && user.Password == encrypt.HashPassword(password,user.Salt))
+        {
+            Login(user.UserId ?? 0);
+            return user.UserId ?? 0;
+        }
+        throw new AuthorizationExeception();
+    }
     public async Task<ValidationResult?> Validate(string email)
     {
         var user= await authDal.GetUser(email);
-        if(user.UserId!=null)
+        if(user.UserId != null)
         {
             return new ValidationResult("Email уже существует");
         }

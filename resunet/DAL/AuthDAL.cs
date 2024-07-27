@@ -31,8 +31,7 @@ public class AuthDAL : IAuthDAL
         using (var connection=new NpgsqlConnection(DbHelper.ConnString)){
             await connection.OpenAsync();
             string sql=@"insert into AppUser(Email, Password, Salt, Status)
-                        values(@Email,@Password,@Salt,@Status);
-                        select currval(pg_get_serial_sequence('AppUser','userid'));";   
+                        values(@Email,@Password,@Salt,@Status) returning UserId";   
             return await connection.QuerySingleAsync<int>(sql, model);
         }
     }
