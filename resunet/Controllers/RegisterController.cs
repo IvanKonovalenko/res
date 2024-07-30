@@ -23,7 +23,7 @@ public class RegisterController:Controller
     {
         if(ModelState.IsValid)
         {
-            var errorModel=await authBl.Validate(model.Email??"");
+            var errorModel=await authBl.ValidateEmail(model.Email??"");
             if(errorModel!=null)
             {
                 ModelState.TryAddModelError("Email",errorModel.ErrorMessage!);

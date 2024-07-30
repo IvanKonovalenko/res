@@ -35,7 +35,7 @@ public class AuthBL : IAuthBL
         }
         throw new AuthorizationExeception();
     }
-    public async Task<ValidationResult?> Validate(string email)
+    public async Task<ValidationResult?> ValidateEmail(string email)
     {
         var user= await authDal.GetUser(email);
         if(user.UserId != null)
