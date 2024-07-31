@@ -6,8 +6,10 @@ public class BaseTest
     protected IEncrypt encrypt = new Encyrpt();
     protected IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
     protected IAuthBL authBL;
+    protected IDbSession dbSession;
     public BaseTest()
     {
-        authBL = new AuthBL(authDal,encrypt,httpContextAccessor); 
+        dbSession=new DbSession(new DbSessionDAL(), httpContextAccessor);
+        authBL = new AuthBL(authDal,encrypt,httpContextAccessor, dbSession); 
     }
 }

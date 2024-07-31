@@ -15,9 +15,9 @@ public class HomeController : Controller
         this.currentUser = currentUser;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View(currentUser.IsLoggedIn());
+        return View(await currentUser.IsLoggedIn());
     }
 
     public IActionResult Privacy()

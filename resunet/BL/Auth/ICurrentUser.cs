@@ -1,4 +1,4 @@
 public interface ICurrentUser
 {
-    bool IsLoggedIn();
+    Task<bool> IsLoggedIn();
 }
