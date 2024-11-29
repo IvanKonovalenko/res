@@ -19,11 +19,10 @@ public class RegisterTests:BaseTest
             string email = Guid.NewGuid().ToString()+"@test.com";
 
             //validate: should not be in the DB
-            var emailValidationResult = await authBL.ValidateEmail(email);
-            Assert.IsNull(emailValidationResult);
+           auth.ValidateEmail(email).GetAwaiter().GetResult();
 
             // create user
-            int userId = await authBL.CreateUser(new UserModel(){
+            int userId = await auth.CreateUser(new UserModel(){
                 Email = email,
                 Password ="qwer1234"
             });
@@ -38,8 +37,7 @@ public class RegisterTests:BaseTest
             Assert.That(email, Is.EqualTo(userbyemaildalresult.Email));
 
             //validate: should be in the DB
-            emailValidationResult = await authBL.ValidateEmail(email);
-            Assert.IsNotNull(emailValidationResult);
+            Assert.Throws<DuplicateEmailException>(()=>auth.ValidateEmail(email).GetAwaiter().GetResult());
 
             Assert.That(encrypt.HashPassword("qwer1234",userbyemaildalresult.Salt), Is.EqualTo(userbyemaildalresult.Password));
 

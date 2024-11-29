@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 
 public class LoginController : Controller
 {
-    private readonly IAuthBL authBl;
-    public LoginController(IAuthBL authBl)
+    private readonly IAuth auth;
+    public LoginController(IAuth auth)
     {
-        this.authBl = authBl;
+        this.auth = auth;
     }
 
     [HttpGet]
@@ -23,7 +23,7 @@ public class LoginController : Controller
         {
             try
             {
-                int id=await authBl.Authenticate(model.Email!, model.Password!,model.RememberMe==true);
+                int id=await auth.Authenticate(model.Email!, model.Password!,model.RememberMe==true);
                 return Redirect("/");
             }
             catch(AuthorizationExeception) 

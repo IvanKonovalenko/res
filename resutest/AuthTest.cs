@@ -15,26 +15,26 @@ public class AuthTest : BaseTest
             string email= Guid.NewGuid().ToString()+"@test.com";
 
             // create user
-            int userId=await authBL.CreateUser(new UserModel(){
+            int userId=await auth.CreateUser(new UserModel(){
                 Email=email,
                 Password="qwer1234"
             });
             Assert.Throws<AuthorizationExeception>(delegate 
             { 
-                authBL.Authenticate("waffas", "111",false).GetAwaiter().GetResult(); 
+                auth.Authenticate("waffas", "111",false).GetAwaiter().GetResult(); 
             });
 
             Assert.Throws<AuthorizationExeception>(delegate 
             {
-                authBL.Authenticate(email, "111",false).GetAwaiter().GetResult();
+                auth.Authenticate(email, "111",false).GetAwaiter().GetResult();
             });
 
             Assert.Throws<AuthorizationExeception>(delegate 
             {
-                authBL.Authenticate("waffas", "qwer1234",false).GetAwaiter().GetResult();
+                auth.Authenticate("waffas", "qwer1234",false).GetAwaiter().GetResult();
             });
 
-            await authBL.Authenticate(email, "qwer1234",false);
+            await auth.Authenticate(email, "qwer1234",false);
 
         }
     }

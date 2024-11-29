@@ -3,7 +3,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<IAuthBL,AuthBL>();
+builder.Services.AddScoped<IAuth,Auth>();
 builder.Services.AddSingleton<IAuthDAL,AuthDAL>();
 builder.Services.AddSingleton<IEncrypt,Encyrpt>();
 builder.Services.AddScoped<ICurrentUser,CurrentUser>();

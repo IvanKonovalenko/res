@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 public class RegisterController:Controller
 {
-    private readonly IAuthBL authBl;
+    private readonly IAuth auth;
 
-    public RegisterController(IAuthBL authBl)
+    public RegisterController(IAuth auth)
     {
-        this.authBl = authBl;
+        this.auth = auth;
     }
 
     [HttpGet]
@@ -21,18 +21,19 @@ public class RegisterController:Controller
     [Route("/register")]
     public async Task<IActionResult> IndexSave(RegisterViewModel model)
     {
+       
         if(ModelState.IsValid)
         {
-            var errorModel=await authBl.ValidateEmail(model.Email??"");
-            if(errorModel!=null)
+            try
             {
-                ModelState.TryAddModelError("Email",errorModel.ErrorMessage!);
+                await auth.Register(AuthMapper.MapRegisterViewModelToUserModel(model));
+                return Redirect("/");
             }
-        }
-        if(ModelState.IsValid)
-        {
-            await authBl.CreateUser(AuthMapper.MapRegisterViewModelToUserModel(model));
-            return Redirect("/");
+            catch (DuplicateEmailException)
+            {
+                ModelState.TryAddModelError("Email","Email уже существует");
+            }
+            
         }
         return View("Index",model);
     }

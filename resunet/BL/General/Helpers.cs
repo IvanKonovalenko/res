@@ -1,3 +1,4 @@
+using System.Transactions;
 public static class Helpers
 {
     public static int? StringToIntDef(string str, int? def)
@@ -7,4 +8,10 @@ public static class Helpers
             return value;
         return def;
     } 
+    public static TransactionScope CreateTransactionScope(int seconds=6000)
+    {
+        return new TransactionScope(TransactionScopeOption.Required, 
+                                    new TimeSpan(0,0,seconds),
+                                    TransactionScopeAsyncFlowOption.Enabled);
+    }
 }
